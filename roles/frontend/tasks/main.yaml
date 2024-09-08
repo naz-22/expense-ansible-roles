@@ -8,26 +8,33 @@
       name: nginx
       state: started
       enabled: yes
-  - name: remove html directory
-    ansible.builtin.file:
-      path: /usr/share/nginx/html
-      state: absent
 
-  - name: create html directory
-    ansible.builtin.file:
-      path: /usr/share/nginx/html
-      state: directory
 
-  - name: download the frontend code
-    ansible.builtin.get_url:
-      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-      dest: /tmp/frontend.zip
+  - name: import tasks from common role
+    ansible.builtin.import_role:
+     name: common
+     tasks_from: app-pre-req
 
-  - name: extract the code
-    ansible.builtin.unarchive:
-      src: /tmp/frontend.zip #by default ansible thinks this is in ansible server
-      dest: /usr/share/nginx/html
-      remote_src: yes
+  # - name: remove html directory
+  #   ansible.builtin.file:
+  #     path: /usr/share/nginx/html
+  #     state: absent
+
+  # - name: create html directory
+  #   ansible.builtin.file:
+  #     path: /usr/share/nginx/html
+  #     state: directory
+
+  # - name: download the frontend code
+  #   ansible.builtin.get_url:
+  #     url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+  #     dest: /tmp/frontend.zip
+
+  # - name: extract the code
+  #   ansible.builtin.unarchive:
+  #     src: /tmp/frontend.zip #by default ansible thinks this is in ansible server
+  #     dest: /usr/share/nginx/html
+  #     remote_src: yes
 
   - name: copy expense conf
     #ansible.builtin.copy: if we give this module by default it search in files folder wehn we run this playbook since copy is without variables.
