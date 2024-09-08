@@ -30,8 +30,9 @@
       remote_src: yes
 
   - name: copy expense conf
-    ansible.builtin.copy:
-      src: expense.conf
+    #ansible.builtin.copy: if we give this module by default it search in files folder wehn we run this playbook since copy is without variables.
+    ansible.builtin.template:
+      src: expense.conf.j2
       dest: /etc/nginx/default.d/expense.conf
 
   - name: restart nginx
